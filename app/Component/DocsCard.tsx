@@ -58,7 +58,7 @@ const DocsCard: React.FC<DocsCardProps> = ({
   return (
     <>
       {variant === "list" ? (
-        <div className={`rounded-xl p-4 flex items-center justify-between shadow-md transition-all duration-300 border ${cardBg}`}>
+        <div className={`rounded-xl overflow-x-hidden p-4 flex items-center justify-between shadow-md transition-all duration-300 border ${cardBg}`}>
           <div className="flex items-center gap-4">
             <div className={`w-10 h-10 ${theme === "dark" ? "bg-zinc-700" : "bg-gray-100"} rounded-md flex items-center justify-center text-xl`}>
               📄
