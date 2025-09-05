@@ -37,6 +37,16 @@ const DocsPage = () => {
     fetchFiles();
   }, []);
 
+  // Force list view on small screens
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  useEffect(() => {
+    const updateScreen = () => setIsSmallScreen(window.innerWidth < 640);
+    updateScreen();
+    window.addEventListener("resize", updateScreen);
+    return () => window.removeEventListener("resize", updateScreen);
+  }, []);
+  const effectiveView = isSmallScreen ? "list" : view;
+
   // Function to open the delete modal, passed to DocsCard
   const openDeleteModal = (fileId: string) => {
     setFileToDelete(fileId);
@@ -85,7 +95,7 @@ const DocsPage = () => {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-2xl md:text-3xl font-semibold my-4">Documents</h1>
-          <div className="mt-2 md:mt-0" role="tablist" aria-label="View toggle">
+          <div className="mt-2 md:mt-0 hidden sm:block" role="tablist" aria-label="View toggle">
             <div
               className={cn(
                 "inline-flex items-center rounded-md border p-1",
@@ -94,12 +104,12 @@ const DocsPage = () => {
             >
               <button
                 type="button"
-                aria-pressed={view === "list"}
+                aria-pressed={effectiveView === "list"}
                 onClick={() => setView("list")}
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
                   theme === "dark" ? "focus-visible:ring-offset-zinc-900" : "focus-visible:ring-offset-white",
-                  view === "list"
+                  effectiveView === "list"
                     ? "bg-blue-600 text-white shadow-sm"
                     : theme === "dark"
                       ? "text-zinc-200 hover:bg-zinc-800"
@@ -111,12 +121,12 @@ const DocsPage = () => {
               </button>
               <button
                 type="button"
-                aria-pressed={view === "grid"}
+                aria-pressed={effectiveView === "grid"}
                 onClick={() => setView("grid")}
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
                   theme === "dark" ? "focus-visible:ring-offset-zinc-900" : "focus-visible:ring-offset-white",
-                  view === "grid"
+                  effectiveView === "grid"
                     ? "bg-blue-600 text-white shadow-sm"
                     : theme === "dark"
                       ? "text-zinc-200 hover:bg-zinc-800"
@@ -142,7 +152,7 @@ const DocsPage = () => {
           </div>
         ) : (
           <>
-            {view === "list" ? (
+            {effectiveView === "list" ? (
               <div className="flex flex-col mt-3 gap-4">
                 {uploadedFiles.map((file) => (
                   <DocsCard

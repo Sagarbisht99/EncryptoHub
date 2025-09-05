@@ -8,6 +8,7 @@ import { UploadCloud } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../Contexts/ThemeContext";
 import { cn } from "../../lib/utlis";
+import { useAuthModal } from "../hooks/useAuthModal";
 
 const UploadPage = () => {
   const { uploadFile, uploadLoading, error, clearError } = useFileUpload();
@@ -15,6 +16,7 @@ const UploadPage = () => {
   const [validationError, setValidationError] = useState<string>("");
   const router = useRouter();
   const { theme } = useTheme();
+  const { openSignUpModal } = useAuthModal();
 
   useEffect(() => {
     return () => {
@@ -67,7 +69,10 @@ const UploadPage = () => {
         toast.success(`File uploaded: ${result.file?.title}`);
         router.push("/Docs");
       } else {
-        router.push("/sign-up");
+        // Check if the error is due to authentication
+        if (result.error?.includes("Unauthorized") || result.error?.includes("login")) {
+          openSignUpModal();
+        }
         toast.error(result.error || "Upload failed");
       }
     } catch (err) {

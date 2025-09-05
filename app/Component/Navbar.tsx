@@ -101,7 +101,7 @@ const Navbar = () => {
             <ThemeToggle />
 
             <SignedOut>
-              <SignInButton>
+              <SignInButton mode="modal">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
@@ -116,7 +116,7 @@ const Navbar = () => {
                 </motion.button>
               </SignInButton>
 
-              <SignUpButton>
+              <SignUpButton mode="modal">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}

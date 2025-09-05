@@ -10,6 +10,7 @@ import React, {
   useCallback,
 } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthModal } from "../hooks/useAuthModal";
 
 interface FormData {
   url: string;
@@ -51,6 +52,7 @@ const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export const FormProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
+  const { openSignUpModal } = useAuthModal();
   const [isEditMode, setEditMode] = useState(false);
   const [currentPasswordId, setCurrentPasswordId] = useState<string | null>(
     null
@@ -115,8 +117,11 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (!response.ok) {
-        router.push("/sign-up");
         const errorData = await response.json();
+        if (response.status === 401) {
+          // User is not authenticated, open sign-up modal
+          openSignUpModal();
+        }
         throw new Error(errorData.error || "Failed to save password");
       }
 

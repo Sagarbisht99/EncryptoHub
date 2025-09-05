@@ -111,7 +111,7 @@ const DocsCard: React.FC<DocsCardProps> = ({
           </div>
 
           {/* Mobile Menu */}
-          <div className="md:hidden relative" ref={menuRef}>
+          <div className="md:hidden " ref={menuRef}>
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
               className={`p-2 rounded-full ${theme === "dark" ? "bg-zinc-700 text-white hover:bg-zinc-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} transition`}
